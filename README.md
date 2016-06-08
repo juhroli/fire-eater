@@ -7,3 +7,8 @@ docker build -t fire-eater .
 docker run --name mongo -p 27017:27017 mongo:3.3
 docker run --name fire-eater -p 9081:9081 --link mongo:mongo -d fire-eater
 ```
+
+## POST example
+```
+curl -H "Content-Type: application/json" -H "source: collectionName" -d "{\"name\" : \"Gopher\", \"birthday\" : {\"date\" : 2016, \"month\" : 6, \"day\" : 9}}" -X POST http://192.168.99.100:9081/consume
+```
