@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"github.com/julienschmidt/httprouter"
 	"gopkg.in/mgo.v2"
-	"strings"
 	"io/ioutil"
 	"encoding/json"
 )
@@ -24,11 +23,10 @@ func NewFireController(s *mgo.Session) *FireController {
 
 func (fc FireController) handler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	content_type := r.Header.Get("Content-Type")
-	if content_type != "application/json" {
+	if content_type != "application/json" || content_type != "text/plain" {
 		w.WriteHeader(400)
 		return
 	}
-
 
 	buf, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -41,7 +39,7 @@ func (fc FireController) handler(w http.ResponseWriter, r *http.Request, _ httpr
 
 	json.Unmarshal(buf, &json_body)
 	source := r.Header.Get("source")
-	fc.session.DB("FireEaterData").C(strings.Replace(source, "-", "_", 0)).Insert(json_body)
+	fc.session.DB("FireEaterData").C(source).Insert(json_body)
 	w.WriteHeader(200)
 }
 
