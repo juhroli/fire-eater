@@ -23,7 +23,7 @@ func NewFireController(s *mgo.Session) *FireController {
 
 func (fc FireController) handler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	content_type := r.Header.Get("Content-Type")
-	if content_type != "application/json" || content_type != "text/plain" {
+	if content_type != "application/json" && content_type != "text/plain" {
 		w.WriteHeader(400)
 		return
 	}
